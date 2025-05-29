@@ -9,9 +9,10 @@ SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME"
 
 mkdir -p $LOG_FOLDER
+echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 # Checks if the user is root user or not
-if [ $USER_ID -ne 0]
+if [ $USER_ID -ne 0 ]
 then
 echo -e "$R ERROR:: Please run this script with root access $N" | tee -a $LOG_FILE
 exit 1

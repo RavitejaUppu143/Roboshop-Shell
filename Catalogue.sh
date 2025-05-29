@@ -6,6 +6,7 @@ N="\e[0m"
 LOG_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME"
+SCRIPT_DIR=$PWD
 
 mkdir -p $LOG_FOLDER
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
@@ -31,43 +32,45 @@ VALIDATE(){
     fi
 }
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "Nodejs disabled"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "Nodeja enabled"
 
-dnf install nodejs -y
+dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Nodejs installation"
 
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+VALIDATE $? "Creating Roboshop user"
+
 mkdir -p /app 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 cd /app 
 unzip /tmp/catalogue.zip
-VALIDATE $? "Source code download and pasted in app directory"
+VALIDATE $? "Created the app directory and downloaded the source code and pasted in it"
 
 cd /app 
-npm install 
+npm install &>>$LOG_FILE
 VALIDATE $? "npm installing the dependencies"
 
-cp Catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/Catalogue.service /etc/systemd/system/catalogue.service 
 VALIDATE $? "Service file configuration"
 
-systemctl daemon-reload
-systemctl enable catalogue 
-systemctl start catalogue
+systemctl daemon-reload &>>$LOG_FILE
+systemctl enable catalogue &>>$LOG_FILE
+systemctl start catalogue &>>$LOG_FILE
 VALIDATE $? "Catalogue service starting"
 
 
 cp Mongo.repo /etc/yum.repos.d/mongodb.repo
 VALIDATE $? "Copying MongoDB repo"
 
-dnf install mongodb-mongosh -y
-VALIDATE $? "Mongosh client is installation"
+dnf install mongodb-mongosh -y &>>$LOG_FILE
+VALIDATE $? "Mongosh client installation"
 
 
-mongosh --host mongodb.ravitejauppu.site </app/db/master-data.js
+mongosh --host mongodb.ravitejauppu.site </app/db/master-data.js 
 VALIDATE $? "data loaded to the Mongodb database"
 
 

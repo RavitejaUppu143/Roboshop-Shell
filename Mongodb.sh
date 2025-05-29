@@ -20,6 +20,7 @@ else
 echo "You are running with root access" | tee -a $LOG_FILE
 fi
 
+
 # Validate if the given command is successfull or not
 VALIDATE(){
     if [ $1 -eq 0 ]
@@ -31,7 +32,7 @@ VALIDATE(){
     fi
 }
 
-cp mongo.repo /etc/yum.repos.d/mongodb.repo
+cp Mongo.repo /etc/yum.repos.d/mongodb.repo
 VALIDATE $? "Copying MongoDB repo"
 
 dnf install mongodb-org -y &>>$LOG_FILE

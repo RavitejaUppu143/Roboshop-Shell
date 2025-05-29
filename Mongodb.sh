@@ -1,9 +1,9 @@
 #!/bin/bash
 USER_ID=$(id -u)
-R="/e[31m"
-G="/e[32m"
-Y="/e[33m"
-W="/e[0m"
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+W="\e[0m"
 LOG_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME"

@@ -61,30 +61,19 @@ cd /app
 npm install &>>$LOG_FILE
 VALIDATE $? "npm installing the dependencies"
 
-cp $SCRIPT_DIR/Catalogue.service /etc/systemd/system/catalogue.service 
+cp $SCRIPT_DIR/Cart.service /etc/systemd/system/cart.service 
 VALIDATE $? "Service file configuration"
 
 systemctl daemon-reload &>>$LOG_FILE
-systemctl enable catalogue &>>$LOG_FILE
-systemctl start catalogue &>>$LOG_FILE
-VALIDATE $? "Catalogue service starting"
+systemctl enable cart &>>$LOG_FILE
+systemctl start cart &>>$LOG_FILE
+VALIDATE $? "Cart service starting"
 
 
-cp $SCRIPT_DIR/Mongo.repo /etc/yum.repos.d/mongodb.repo
-VALIDATE $? "Copying MongoDB repo"
-
-dnf install mongodb-mongosh -y &>>$LOG_FILE
-VALIDATE $? "Mongosh client installation"
 
 
-STATUS=$(mongosh --host mongodb.ravitejauppu.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
-if [ $STATUS -lt 0 ]
-then
-    mongosh --host mongodb.ravitejauppu.site </app/db/master-data.js &>>$LOG_FILE
-    VALIDATE $? "Loading data into MongoDB"
-else
-    echo -e "Data is already loaded ... $Y SKIPPING $N"
-fi
+
+
 
 
 

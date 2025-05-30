@@ -1,4 +1,5 @@
 #!/bin/bash
+#!/usr/local/bin/aws
 
 AMI_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-040370d16c0a7a644"

@@ -5,7 +5,7 @@ Y="\e[33m"
 N="\e[0m"
 LOG_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME"
+LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 SCRIPT_DIR=$PWD
 
 mkdir -p $LOG_FOLDER
@@ -32,24 +32,24 @@ VALIDATE(){
     fi
 }
 
-dnf module disable redis -y $LOG_FILE
+dnf module disable redis -y &>>$LOG_FILE
 VALIDATE $? "Redis disabled"
 
-dnf module enable redis:7 -y $LOG_FILE
+dnf module enable redis:7 -y &>>$LOG_FILE
 VALIDATE $? "Redis disabled"
 
-dnf install redis -y $LOG_FILE
+dnf install redis -y &>>$LOG_FILE
 VALIDATE $? "Installing Redis"
 
-sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf $LOG_FILE
+sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf &>>$LOG_FILE
 VALIDATE $? "IP address is updated from 127.0.0.1 to 0.0.0.0"
 
 
-sed -i 's/protected-mode yes/protected-mode no/g' /etc/redis/redis.conf $LOG_FILE
+sed -i 's/protected-mode yes/protected-mode no/g' /etc/redis/redis.conf &>>$LOG_FILE
 VALIDATE $? "Protected mode is set from yes to no"
 
 
-systemctl enable redis $LOG_FILE
-systemctl start redis $LOG_FILE
+systemctl enable redis &>>$LOG_FILE
+systemctl start redis &>>$LOG_FILE
 VALIDATE $? "Starting Redis Service"
 

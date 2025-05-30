@@ -41,7 +41,7 @@ VALIDATE $? "Nodeja enabled"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Nodejs installation"
 
-id roboshop
+id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
@@ -52,9 +52,9 @@ fi
 
 rm -rf /app/*
 mkdir -p /app 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 cd /app 
-unzip /tmp/catalogue.zip
+unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "Created the app directory and downloaded the source code and pasted in it"
 
 cd /app 

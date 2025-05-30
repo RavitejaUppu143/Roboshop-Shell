@@ -50,6 +50,7 @@ else
     echo -e "System user roboshop already created ... $Y SKIPPING $N"
 fi
 
+rm -rf /app/*
 mkdir -p /app 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 cd /app 
@@ -69,7 +70,7 @@ systemctl start catalogue &>>$LOG_FILE
 VALIDATE $? "Catalogue service starting"
 
 
-cp Mongo.repo /etc/yum.repos.d/mongodb.repo
+cp $SCRIPT_DIR/Mongo.repo /etc/yum.repos.d/mongodb.repo
 VALIDATE $? "Copying MongoDB repo"
 
 dnf install mongodb-mongosh -y &>>$LOG_FILE

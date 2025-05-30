@@ -41,8 +41,14 @@ VALIDATE $? "Nodeja enabled"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Nodejs installation"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-VALIDATE $? "Creating Roboshop user"
+id roboshop
+if [ $? -ne 0 ]
+then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+    VALIDATE $? "Creating roboshop system user"
+else
+    echo -e "System user roboshop already created ... $Y SKIPPING $N"
+fi
 
 mkdir -p /app 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
@@ -70,8 +76,14 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Mongosh client installation"
 
 
-mongosh --host mongodb.ravitejauppu.site </app/db/master-data.js 
-VALIDATE $? "data loaded to the Mongodb database"
+STATUS=$(mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+if [ $STATUS -lt 0 ]
+then
+    mongosh --host mongodb.daws84s.site </app/db/master-data.js &>>$LOG_FILE
+    VALIDATE $? "Loading data into MongoDB"
+else
+    echo -e "Data is already loaded ... $Y SKIPPING $N"
+fi
 
 
 

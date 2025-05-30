@@ -51,10 +51,10 @@ else
 fi
 
 rm -rf /app/*
-mkdir -p /app 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
+mkdir -p /app
+curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
 cd /app 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
+unzip /tmp/user.zip &>>$LOG_FILE
 VALIDATE $? "Created the app directory and downloaded the source code and pasted in it"
 
 cd /app 
@@ -65,27 +65,7 @@ cp $SCRIPT_DIR/Catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Service file configuration"
 
 systemctl daemon-reload &>>$LOG_FILE
-systemctl enable catalogue &>>$LOG_FILE
-systemctl start catalogue &>>$LOG_FILE
-VALIDATE $? "Catalogue service starting"
-
-
-cp $SCRIPT_DIR/Mongo.repo /etc/yum.repos.d/mongodb.repo
-VALIDATE $? "Copying MongoDB repo"
-
-dnf install mongodb-mongosh -y &>>$LOG_FILE
-VALIDATE $? "Mongosh client installation"
-
-
-STATUS=$(mongosh --host mongodb.ravitejauppu.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
-if [ $STATUS -lt 0 ]
-then
-    mongosh --host mongodb.ravitejauppu.site </app/db/master-data.js &>>$LOG_FILE
-    VALIDATE $? "Loading data into MongoDB"
-else
-    echo -e "Data is already loaded ... $Y SKIPPING $N"
-fi
-
-
-
+systemctl enable user &>>$LOG_FILE
+systemctl start user &>>$LOG_FILE
+VALIDATE $? "User service starting"
 

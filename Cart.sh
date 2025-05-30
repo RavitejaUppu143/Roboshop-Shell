@@ -52,9 +52,9 @@ fi
 
 rm -rf /app/*
 mkdir -p /app 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
+curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>$LOG_FILE
 cd /app 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
+unzip /tmp/cart.zip &>>$LOG_FILE
 VALIDATE $? "Created the app directory and downloaded the source code and pasted in it"
 
 cd /app 

@@ -47,7 +47,7 @@ then
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
 VALIDATE $? "Robshop user creation"
 else
-echo "Roboshop user is already created......$Y SKIPPING $N" | tee -a $LOG_FILE
+echo -e "Roboshop user is already created......$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
 
 rm -rf /app/*
@@ -79,12 +79,12 @@ VALIDATE $? "Shipping service starting"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Mysql client installation"
 
-mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE
+mysql -h mysql.ravitejauppu.site -u root -p$MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
-    mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
-    mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
-    mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
+    mysql -h mysql.ravitejauppu.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+    mysql -h mysql.ravitejauppu.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
+    mysql -h mysql.ravitejauppu.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
     VALIDATE $? "Loading data into MySQL"
 else
     echo -e "Data is already loaded into MySQL ... $Y SKIPPING $N"

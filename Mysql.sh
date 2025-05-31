@@ -1,3 +1,6 @@
+#!/bin/bash
+
+START_TIME=$(date +%s)
 USER_ID=$(id -u)
 R="\e[31m"
 G="\e[32m"
@@ -41,3 +44,8 @@ VALIDATE $? "Stating Mysql service"
 
 mysql_secure_installation --set-root-pass RoboShop@1 &>>$LOG_FILE
 VALIDATE $? "Root password setting to Mysql"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME ))
+
+echo -e "Script exection completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE

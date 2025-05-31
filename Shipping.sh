@@ -38,7 +38,7 @@ VALIDATE(){
 dnf install maven -y &>>$LOG_FILE
 VALIDATE $? "Maven is installation"
 
-id roboshop
+id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
@@ -73,7 +73,7 @@ systemctl start shipping &>>$LOG_FILE
 VALIDATE $? "Shipping service starting"
 
 
-dnf install mysql -y 
+dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Mysql client installation"
 
 mysql -h mysql.daws84s.site -u root -p$MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE

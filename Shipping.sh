@@ -23,6 +23,9 @@ else
 echo "You are running with root access" | tee -a $LOG_FILE
 fi
 
+echo "Please enter root password to setup"
+read -s MYSQL_ROOT_PASSWORD
+
 
 # Validate if the given command is successfull or not
 VALIDATE(){
@@ -76,12 +79,12 @@ VALIDATE $? "Shipping service starting"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Mysql client installation"
 
-mysql -h mysql.daws84s.site -uroot -pRoboShop@1 -e 'use cities' &>>$LOG_FILE
+mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
-    mysql -h mysql.daws84s.site -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
-    mysql -h mysql.daws84s.site -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOG_FILE
-    mysql -h mysql.daws84s.site -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+    mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+    mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
+    mysql -h mysql.ravitejauppu.site -u root -p $MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
     VALIDATE $? "Loading data into MySQL"
 else
     echo -e "Data is already loaded into MySQL ... $Y SKIPPING $N"

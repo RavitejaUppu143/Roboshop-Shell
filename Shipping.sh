@@ -23,6 +23,8 @@ else
 echo "You are running with root access" | tee -a $LOG_FILE
 fi
 
+echo "Please enter root password to setup"
+read -s MYSQL_ROOT_PASSWORD
 
 # Validate if the given command is successfull or not
 VALIDATE(){

@@ -42,8 +42,8 @@ VALIDATE $? "Enabling Nginx:1.24"
 dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "Installing Nginx"
 
-systemctl enable nginx  &>>$LOG_FILE
-systemctl start nginx 
+systemctl enable nginx &>>$LOG_FILE
+systemctl start nginx &>>$LOG_FILE
 VALIDATE $? "Starting Nginx"
 
 rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
